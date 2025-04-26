@@ -1,9 +1,30 @@
 package com.example.auth_service.dtos;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class RegisterUserDto {
     private String email;
     private String password;
     private String fullName;
+    private LocalDate birthDay;
+    private String gender;
+
+    public LocalDate getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(LocalDate birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public String getEmail() {
         return email;

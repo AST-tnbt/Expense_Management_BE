@@ -3,7 +3,7 @@ package com.example.auth_service.dtos;
 public class LoginResponse {
     private String accessToken;
     private String refreshToken;
-    private long expiresIn;
+    private long accessExpiresIn;
 
     public String getAccessToken() {
         return accessToken;
@@ -22,10 +22,10 @@ public class LoginResponse {
     }
 
     public long getExpiresIn() {
-        return expiresIn;
+        return accessExpiresIn;
     }
 
     public void setExpiresIn(long expiresIn) {
-        this.expiresIn = expiresIn;
+        this.accessExpiresIn = expiresIn;
     }
 }
