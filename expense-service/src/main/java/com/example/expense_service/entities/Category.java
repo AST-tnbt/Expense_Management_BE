@@ -24,8 +24,9 @@ public class Category {
     public Category() {
     }
 
-    public Category(String title) {
+    public Category(String title,String iconId) {
         this.title = title;
+        this.iconId=iconId;
     }
 
     public UUID getCateId() {
