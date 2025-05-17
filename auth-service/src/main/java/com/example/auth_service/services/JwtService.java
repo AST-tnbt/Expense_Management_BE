@@ -1,9 +1,11 @@
 package com.example.auth_service.services;
 
+import com.example.auth_service.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.jackson.io.JacksonSerializer;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +34,8 @@ public class JwtService {
     private long refreshExpiration;
     @Autowired
     private StringRedisTemplate redisTemplate;
+    @Autowired
+    private JacksonSerializer<Map<String, ?>> jwtJacksonSerializer;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -37,16 +44,49 @@ public class JwtService {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails, jwtExpiration);
+    public String generateToken(User userDetails) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", userDetails.getId().toString());
+
+        // Convert LocalDateTime to milliseconds
+        extraClaims.put("passwordChangeAt",
+                userDetails.getPasswordLastChanged()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli());
+
+        return generateToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails, refreshExpiration);
+    public String generateRefreshToken(User userDetails) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", userDetails.getId().toString());
+
+        // Convert LocalDateTime to milliseconds
+        extraClaims.put("passwordChangeAt",
+                userDetails.getPasswordLastChanged()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli());
+
+        return generateToken(extraClaims, userDetails, refreshExpiration);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, long expirationTime) {
         return buildToken(extraClaims, userDetails, expirationTime);
+    }
+
+    public LocalDateTime getPasswordChangeAt(String token) {
+        Long timestamp = extractClaim(token, claims -> claims.get("passwordChangeAt", Long.class));
+
+        if (timestamp == null) {
+            return null;
+        }
+
+        return LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(timestamp),
+                ZoneId.systemDefault()
+        );
     }
 
     public long getExpirationTime() {
@@ -63,6 +103,7 @@ public class JwtService {
     ) {
         return Jwts
                 .builder()
+                .serializeToJsonWith(jwtJacksonSerializer)
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
