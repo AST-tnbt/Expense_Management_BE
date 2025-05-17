@@ -2,12 +2,16 @@ package com.example.auth_service.controllers;
 
 import com.example.auth_service.dtos.ChangePassDto;
 import com.example.auth_service.dtos.UpdateUserRequest;
+import com.example.auth_service.dtos.UserInfoResponseDto;
 import com.example.auth_service.dtos.UserResponse;
 import com.example.auth_service.entities.User;
 import com.example.auth_service.repositories.UserRepository;
 import com.example.auth_service.services.UserService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -26,20 +30,15 @@ public class UserController {
         this.userService = userService;
         this.userRepository = userRepository;
     }
-
     @GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        User currentUser = (User) authentication.getPrincipal();
-
+    public ResponseEntity<UserInfoResponseDto> authenticatedUser(@AuthenticationPrincipal User user) {
+        UserInfoResponseDto currentUser = getUserInfo(user);
         return ResponseEntity.ok(currentUser);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<User>> allUsers() {
-        List <User> users = userService.allUsers();
-        return ResponseEntity.ok(users);
+    @Cacheable(value = "authenticatedUsers", key = "#user.id", unless = "#result == null")
+    private UserInfoResponseDto getUserInfo(User user) {
+        return new UserInfoResponseDto(user.getId(), user.getFullName(), user.getEmail(), user.getBirthDay(), user.getGender());
     }
 
     @PutMapping("/{id}")
@@ -63,4 +62,5 @@ public class UserController {
                 .map(user -> ResponseEntity.ok(user.getPasswordLastChanged()))
                 .orElse(ResponseEntity.notFound().build());
     }
+
 }

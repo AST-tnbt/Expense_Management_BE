@@ -112,7 +112,7 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_CLOUD_GATEWAY_ROUTES_0_ID: auth-service
       SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://auth-service:8080
-      SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/auth/**,/users/**
+      SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/auth/**,/users/**,/logout,/refresh
       SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0: PreserveHostHeader
       SPRING_CLOUD_GATEWAY_ROUTES_1_ID: expense-service
       SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://expense-service:8081

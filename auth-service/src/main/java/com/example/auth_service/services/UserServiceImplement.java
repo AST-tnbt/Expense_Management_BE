@@ -4,6 +4,7 @@ import com.example.auth_service.dtos.ChangePassDto;
 import com.example.auth_service.dtos.UpdateUserRequest;
 import com.example.auth_service.entities.User;
 import com.example.auth_service.repositories.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class UserServiceImplement implements UserService {
         return users;
     }
 
+    @CacheEvict(value = "authenticatedUsers", key = "#id")
     @Override
     public User updateUser(UUID id, UpdateUserRequest request) {
         Optional<User> optionalUser = userRepository.findById(id);
