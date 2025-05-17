@@ -1,4 +1,4 @@
-package com.example.api_gateway;
+package com.example.api_gateway.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

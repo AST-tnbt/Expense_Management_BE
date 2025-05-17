@@ -1,5 +1,6 @@
 package com.example.auth_service.configs;
 
+import com.example.auth_service.entities.User;
 import com.example.auth_service.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,6 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -58,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (userEmail != null && authentication == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-                if (jwtService.isTokenValid(jwt, userDetails) && !jwtService.isTokenBlacklisted(jwt)) {
+                if (jwtService.isTokenValid(jwt, userDetails) && !jwtService.isTokenBlacklisted(jwt) && isPasswordChangeValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
@@ -72,7 +75,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            logger.error("JWT filter exception", exception);
             handlerExceptionResolver.resolveException(request, response, null, exception);
+            return;
         }
+    }
+
+    private boolean isPasswordChangeValid(String jwt, UserDetails userDetails) {
+
+        User user = (User) userDetails;
+        LocalDateTime tokenPasswordChangeAt = jwtService.getPasswordChangeAt(jwt);
+        LocalDateTime userPasswordLastChanged = user.getPasswordLastChanged();
+
+        LocalDateTime tokenTime = tokenPasswordChangeAt.truncatedTo(ChronoUnit.MILLIS);
+        LocalDateTime userTime = userPasswordLastChanged.truncatedTo(ChronoUnit.MILLIS);
+
+        // Token is valid if its passwordChangeAt is equal to or after the user's passwordLastChanged
+        return !tokenTime.isBefore(userTime);
     }
 }

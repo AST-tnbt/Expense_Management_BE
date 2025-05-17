@@ -1,5 +1,6 @@
 package com.example.auth_service.services;
 
+import com.example.auth_service.dtos.ChangePassDto;
 import com.example.auth_service.dtos.UpdateUserRequest;
 import com.example.auth_service.entities.User;
 
@@ -9,4 +10,6 @@ import java.util.UUID;
 public interface UserService {
     List<User> allUsers();
     User updateUser(UUID id, UpdateUserRequest request);
+    void changePassword(UUID userId, ChangePassDto request);
+    User findByUsername(String username);
 }

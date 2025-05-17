@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
@@ -35,6 +37,7 @@ public class AuthenticationService {
         user.setGender(input.getGender());
         user.setBirthDay(input.getBirthDay());
         user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setPasswordLastChanged(LocalDateTime.now());
 
         return userRepository.save(user);
     }

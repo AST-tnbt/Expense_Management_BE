@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,17 @@ public class User implements UserDetails {
 
     @Column(nullable = false, length = 3)
     private String gender;
+
+    @Column(name = "password_last_changed")
+    private LocalDateTime passwordLastChanged;
+
+    public LocalDateTime getPasswordLastChanged() {
+        return passwordLastChanged;
+    }
+
+    public void setPasswordLastChanged(LocalDateTime passwordLastChanged) {
+        this.passwordLastChanged = passwordLastChanged;
+    }
 
     public LocalDate getBirthDay() {
         return birthDay;
