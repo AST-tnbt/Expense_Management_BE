@@ -48,6 +48,7 @@ import java.util.stream.Collectors;
             );
         }
 
+
         @Override
         public ExpenseDTO createExpense(ExpenseDTO dto) {
             Category category = categoryRepository.findById(dto.getCateId())
@@ -101,4 +102,18 @@ import java.util.stream.Collectors;
             );
         }
 
-}
+        @Override
+        public List<ExpenseDTO> getAllExpensesByUserId(UUID userId) {
+            List<Expense> expenses = expenseRepository.findByUserId(userId);
+
+            return expenses.stream()
+                    .map(expense -> new ExpenseDTO(
+                            expense.getDate(),
+                            expense.getSpend(),
+                            expense.getCategory().getTitle(),
+                            expense.getCategory().getIconId()
+                    ))
+                    .collect(Collectors.toList());
+        }
+
+    }

@@ -18,15 +18,18 @@ public class Category {
     private String title;
     @Column(nullable = false)
     private String iconId;
+    @Column(nullable = false)
+    private UUID userId;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Expense> expenses;
 
     public Category() {
     }
 
-    public Category(String title,String iconId) {
+    public Category(String title,String iconId,UUID userId) {
         this.title = title;
         this.iconId=iconId;
+        this.userId=userId;
     }
 
     public UUID getCateId() {
@@ -68,5 +71,13 @@ public class Category {
         }
         expenses.add(tempExpense);
         tempExpense.setCategory(this);
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }

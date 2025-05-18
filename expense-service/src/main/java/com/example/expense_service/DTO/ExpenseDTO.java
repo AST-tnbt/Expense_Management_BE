@@ -11,6 +11,8 @@ public class ExpenseDTO {
     private LocalDate date;
     private BigDecimal spend;
     private UUID cateId;
+    private String Title;
+    private String IconId;
 
     public ExpenseDTO() {}
 
@@ -22,6 +24,13 @@ public class ExpenseDTO {
         this.spend = spend;
         this.cateId = cateId;
     }
+    public ExpenseDTO(LocalDate date, BigDecimal spend, String Title, String iconId) {
+        this.date = date;
+        this.spend = spend;
+        this.Title = Title;
+        this.IconId=iconId;
+    }
+
 
     public UUID getExpenseId() {
         return expenseId;
@@ -63,6 +72,20 @@ public class ExpenseDTO {
         this.cateId = cateId;
     }
 
+    public String getTitle() {
+        return Title;
+    }
 
+    public void setTitle(String title) {
+        Title = title;
+    }
+
+    public String getIconId() {
+        return IconId;
+    }
+
+    public void setIconId(String iconId) {
+        IconId = iconId;
+    }
 }
 

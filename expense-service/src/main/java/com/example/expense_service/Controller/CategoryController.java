@@ -16,9 +16,9 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping
-    public List<CategoryDTO> getAll() {
-        return categoryService.getAllCategory();
+    @GetMapping("/user/{id}")
+    public List<CategoryDTO> getAll(@PathVariable UUID id) {
+        return categoryService.findAllCategoryByUserId(id);
     }
 
     @GetMapping("/{id}")

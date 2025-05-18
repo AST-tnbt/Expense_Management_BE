@@ -1,7 +1,9 @@
 package com.example.expense_service.Service;
 
 import com.example.expense_service.DTO.CategoryDTO;
+import com.example.expense_service.DTO.ExpenseDTO;
 import com.example.expense_service.entities.Category;
+import com.example.expense_service.entities.Expense;
 import com.example.expense_service.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,21 +27,22 @@ public class CategoryServiceImpl implements CategoryService{
                 .map(category -> new CategoryDTO(
                         category.getCateId(),
                         category.getTitle(),
-                        category.getIconId()
+                        category.getIconId(),
+                        category.getUserId()
                 )).collect(Collectors.toList());
     }
 
     @Override
     public CategoryDTO getCateByID(UUID cateId) {
       Category category= categoryRepository.findById(cateId).orElseThrow(()-> new RuntimeException("Category not found"));
-        return new CategoryDTO(category.getCateId(),category.getTitle(),category.getIconId());
+        return new CategoryDTO(category.getCateId(),category.getTitle(),category.getIconId(),category.getUserId());
     }
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-            Category category = new Category(categoryDTO.getTitle(), categoryDTO.getIconId());
+            Category category = new Category(categoryDTO.getTitle(), categoryDTO.getIconId(),categoryDTO.getUserId());
             Category saved = categoryRepository.save(category);
-            return new CategoryDTO(saved.getCateId(),saved.getTitle(),saved.getIconId());
+            return new CategoryDTO(saved.getCateId(),saved.getTitle(),saved.getIconId(),saved.getUserId());
             }
 
     @Override
@@ -54,9 +57,23 @@ public class CategoryServiceImpl implements CategoryService{
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         existing.setTitle(categoryDTO.getTitle());
+        existing.setIconId(categoryDTO.getIconId());
         Category updated = categoryRepository.save(existing);
 
-        return new CategoryDTO(updated.getCateId(),updated.getTitle(), updated.getIconId());
+        return new CategoryDTO(updated.getCateId(),updated.getTitle(), updated.getIconId(),updated.getUserId());
     }
 
+    @Override
+    public List<CategoryDTO> findAllCategoryByUserId(UUID userId) {
+        List<Category> categories = categoryRepository.findAllCategorybyUserId(userId);
+
+        return categories.stream()
+                .map(category -> new CategoryDTO(
+                        category.getTitle(),
+                        category.getIconId(),
+                        category.getUserId()
+                ))
+                .collect(Collectors.toList());
     }
+
+}

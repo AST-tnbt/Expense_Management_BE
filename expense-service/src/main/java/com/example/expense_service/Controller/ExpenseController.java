@@ -22,7 +22,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    public ExpenseDTO getExpenseById(@PathVariable UUID id) {
+    public ExpenseDTO getAllExpensesByUserId(@PathVariable UUID id) {
         return expenseService.getExpenseById(id);
     }
 
