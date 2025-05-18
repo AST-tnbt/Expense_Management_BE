@@ -11,5 +11,6 @@ public interface ExpenseService {
     ExpenseDTO createExpense(ExpenseDTO expenseDTO);
     void deleteExpense(UUID id);
     ExpenseDTO updateExpense(UUID id, ExpenseDTO expenseDTO);
+    List<ExpenseDTO>getAllExpensesByUserId(UUID userId);
 
 }
