@@ -51,16 +51,23 @@ public class ExpenseControllerTest {
     }
 
     @Test
-    public void testGetExpenseById() {
-        ExpenseDTO dto = new ExpenseDTO(expenseId, userId, LocalDate.now(), BigDecimal.valueOf(15000), UUID.randomUUID());
+    public void testGetAllExpensesByUserId() {
+        UUID userId = UUID.randomUUID();
+        ExpenseDTO dto1 = new ExpenseDTO(UUID.randomUUID(), userId, LocalDate.now(), BigDecimal.valueOf(15000), UUID.randomUUID());
+        ExpenseDTO dto2 = new ExpenseDTO(UUID.randomUUID(), userId, LocalDate.now(), BigDecimal.valueOf(20000), UUID.randomUUID());
 
-        when(expenseService.getExpenseById(expenseId)).thenReturn(dto);
+        List<ExpenseDTO> mockList = Arrays.asList(dto1, dto2);
 
-        ExpenseDTO result = expenseController.getAllExpensesByUserId(expenseId);
+        when(expenseService.getAllExpensesByUserId(userId)).thenReturn(mockList);
+
+        List<ExpenseDTO> result = expenseController.getAllExpensesByUserId(userId);
 
         assertNotNull(result);
-        assertEquals(dto.getUserId(), result.getUserId());
+        assertEquals(2, result.size());
+        assertEquals(userId, result.get(0).getUserId());
+        assertEquals(userId, result.get(1).getUserId());
     }
+
 
     @Test
     public void testCreateExpense() {

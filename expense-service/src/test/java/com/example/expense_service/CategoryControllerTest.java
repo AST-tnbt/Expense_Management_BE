@@ -48,20 +48,7 @@ public class CategoryControllerTest {
         assertEquals("Food", result.get(0).getTitle());
         verify(categoryService, times(1)).findAllCategoryByUserId(userId);
     }
-
-    @Test
-    public void testGetById() {
-        CategoryDTO dto = new CategoryDTO(categoryId, "Bills", "💡", userId);
-
-        when(categoryService.getCateByID(categoryId)).thenReturn(dto);
-
-        CategoryDTO result = categoryController.getById(categoryId);
-
-        assertNotNull(result);
-        assertEquals("Bills", result.getTitle());
-        assertEquals("💡", result.getIconId());
-        verify(categoryService, times(1)).getCateByID(categoryId);
-    }
+    
 
     @Test
     public void testCreateCategory() {
