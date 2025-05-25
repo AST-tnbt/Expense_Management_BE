@@ -45,24 +45,7 @@ public class UserControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this); // Initialize mocks
     }
-    @Test
-    public void AuthenticatedUserTest() {
-//        User mockUser = new User();
-//        mockUser.setEmail("tin@gmail.com");
-//        mockUser.setBirthDay(LocalDate.parse("2004-02-27"));
-//        mockUser.setGender("Nam");
-//        mockUser.setFullName("Tin");
-//        when(securityContext.getAuthentication()).thenReturn(authentication);
-//        when(authentication.getPrincipal()).thenReturn(mockUser);
-//        SecurityContextHolder.setContext(securityContext);
-//        ResponseEntity<User> response = userController.authenticatedUser();
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertNotNull(response.getBody());
-//        assertEquals("tin@gmail.com", response.getBody().getUsername());
-//        assertEquals(LocalDate.parse("2004-02-27"), response.getBody().getBirthDay());
-//        assertEquals("Nam", response.getBody().getGender());
-//        assertEquals("Tin", response.getBody().getFullName());
-    }
+
     @Test
     public void updateUserTest() {
         User mockUser = new User();
