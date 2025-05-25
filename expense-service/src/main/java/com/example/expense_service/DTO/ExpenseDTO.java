@@ -24,11 +24,20 @@ public class ExpenseDTO {
         this.spend = spend;
         this.cateId = cateId;
     }
-    public ExpenseDTO(LocalDate date, BigDecimal spend, String Title, String iconId) {
+    public ExpenseDTO(UUID expenseId,LocalDate date, BigDecimal spend, String Title, String iconId) {
+        this.expenseId=expenseId;
         this.date = date;
         this.spend = spend;
         this.Title = Title;
         this.IconId=iconId;
+    }
+    public ExpenseDTO(UUID expenseId,LocalDate date, BigDecimal spend, String Title, String iconId,UUID cateId) {
+        this.expenseId=expenseId;
+        this.date = date;
+        this.spend = spend;
+        this.Title = Title;
+        this.IconId=iconId;
+        this.cateId=cateId;
     }
 
 

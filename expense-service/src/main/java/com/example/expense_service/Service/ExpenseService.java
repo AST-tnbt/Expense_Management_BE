@@ -2,6 +2,7 @@ package com.example.expense_service.Service;
 
 import com.example.expense_service.DTO.ExpenseDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,5 +13,8 @@ public interface ExpenseService {
     void deleteExpense(UUID id);
     ExpenseDTO updateExpense(UUID id, ExpenseDTO expenseDTO);
     List<ExpenseDTO>getAllExpensesByUserId(UUID userId);
+    List<ExpenseDTO> getTop5RecentExpensesInCurrentMonth(UUID userId);
+    BigDecimal getMonthlyTotalSpend(UUID userId); // Không cần truyền month/year nữa
+
 
 }
