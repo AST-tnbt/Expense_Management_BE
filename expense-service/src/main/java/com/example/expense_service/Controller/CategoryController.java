@@ -16,15 +16,11 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public List<CategoryDTO> getAll(@PathVariable UUID id) {
         return categoryService.findAllCategoryByUserId(id);
     }
 
-    @GetMapping("/{id}")
-    public CategoryDTO getById(@PathVariable UUID id) {
-        return categoryService.getCateByID(id);
-    }
 
     @PostMapping
     public CategoryDTO create(@RequestBody CategoryDTO categoryDTO) {

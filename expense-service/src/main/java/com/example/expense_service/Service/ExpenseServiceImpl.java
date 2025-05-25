@@ -8,6 +8,8 @@ import com.example.expense_service.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -108,12 +110,43 @@ import java.util.stream.Collectors;
 
             return expenses.stream()
                     .map(expense -> new ExpenseDTO(
+                            expense.getExpenseId(),
                             expense.getDate(),
                             expense.getSpend(),
                             expense.getCategory().getTitle(),
-                            expense.getCategory().getIconId()
+                            expense.getCategory().getIconId(),
+                            expense.getCategory().getCateId()
                     ))
                     .collect(Collectors.toList());
+        }
+        @Override
+        public List<ExpenseDTO> getTop5RecentExpensesInCurrentMonth(UUID userId) {
+            // Lấy tháng và năm hiện tại
+            LocalDate now = LocalDate.now();
+            int currentMonth = now.getMonthValue();
+            int currentYear = now.getYear();
+
+            List<Expense> expenses = expenseRepository.findTop5ByUserIdAndCurrentMonth(userId, currentMonth, currentYear);
+
+            return expenses.stream()
+                    .limit(5) // đảm bảo chỉ lấy 5 dòng (nếu query chưa giới hạn)
+                    .map(expense -> new ExpenseDTO(
+                            expense.getExpenseId(),
+                            expense.getDate(),
+                            expense.getSpend(),
+                            expense.getCategory().getTitle(),
+                            expense.getCategory().getIconId(),
+                            expense.getCategory().getCateId()
+                    ))
+                    .collect(Collectors.toList());
+        }
+        @Override
+        public BigDecimal getMonthlyTotalSpend(UUID userId) {
+            LocalDate today = LocalDate.now();
+            int currentMonth = today.getMonthValue();
+            int currentYear = today.getYear();
+
+            return expenseRepository.getTotalSpendByUserIdAndMonth(userId, currentMonth, currentYear);
         }
 
     }

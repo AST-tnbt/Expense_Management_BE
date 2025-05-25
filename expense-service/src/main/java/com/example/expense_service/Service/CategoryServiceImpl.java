@@ -65,10 +65,11 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public List<CategoryDTO> findAllCategoryByUserId(UUID userId) {
-        List<Category> categories = categoryRepository.findAllCategorybyUserId(userId);
+        List<Category> categories = categoryRepository.findAllByUserId(userId);
 
         return categories.stream()
                 .map(category -> new CategoryDTO(
+                        category.getCateId(),
                         category.getTitle(),
                         category.getIconId(),
                         category.getUserId()
