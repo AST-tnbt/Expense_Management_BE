@@ -3,6 +3,7 @@ package com.example.auth_service.services;
 import com.example.auth_service.dtos.LoginUserDto;
 import com.example.auth_service.dtos.RegisterUserDto;
 import com.example.auth_service.entities.User;
+import com.example.auth_service.events.UserCreatedEvent;
 import com.example.auth_service.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,19 +16,20 @@ import java.time.LocalDateTime;
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
+    private final EventPublisherService eventPublisherService;
 
     public AuthenticationService(
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            EventPublisherService eventPublisherService
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.eventPublisherService = eventPublisherService;
     }
 
     public User signup(RegisterUserDto input) {
@@ -39,7 +41,17 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(input.getPassword()));
         user.setPasswordLastChanged(LocalDateTime.now());
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        
+        // Publish user created event
+        UserCreatedEvent event = new UserCreatedEvent(
+                savedUser.getId(),
+                savedUser.getFullName(),
+                savedUser.getEmail()
+        );
+        eventPublisherService.publishUserCreatedEvent(event);
+        
+        return savedUser;
     }
 
     public User authenticate(LoginUserDto input) {

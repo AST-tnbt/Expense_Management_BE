@@ -8,6 +8,7 @@ import com.example.expense_service.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -77,4 +78,18 @@ public class CategoryServiceImpl implements CategoryService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void createDefaultCategoriesForUser(UUID userId) {
+        // Define default categories with their icons
+        List<CategoryDTO> defaultCategories = Arrays.asList(
+            new CategoryDTO("Ăn uống", "lunch_dining_24px_category", userId),
+            new CategoryDTO("Mua sắm", "shopping_cart_24px_category", userId),
+            new CategoryDTO("Di chuyển", "train_24px_category", userId)
+        );
+        
+        // Create each default category
+        for (CategoryDTO categoryDTO : defaultCategories) {
+            createCategory(categoryDTO);
+        }
+    }
 }
