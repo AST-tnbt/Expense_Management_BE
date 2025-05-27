@@ -1,7 +1,9 @@
 package com.example.expense_service.Controller;
 
 
+import com.example.expense_service.DTO.CategoryExpenseSummaryDTO;
 import com.example.expense_service.DTO.ExpenseDTO;
+import com.example.expense_service.DTO.ExpenseMonthSummaryDTO;
 import com.example.expense_service.Service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,6 +55,31 @@ public class ExpenseController {
         try {
             BigDecimal totalSpend = expenseService.getMonthlyTotalSpend(userId);
             return ResponseEntity.ok(totalSpend);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    @GetMapping("/year-chart/{userId}")
+    public ResponseEntity<List<ExpenseMonthSummaryDTO>> getExpenseYearChart(
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getYear()}") int year) {
+        try {
+            List<ExpenseMonthSummaryDTO> yearChart = expenseService.getExpenseYearChart(userId, year);
+            return ResponseEntity.ok(yearChart);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    @GetMapping("/month-chart/{userId}")
+    public ResponseEntity<List<CategoryExpenseSummaryDTO>> getMonthChart(
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getYear()}") int year,
+            @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().getMonthValue()}") int month) {
+        try {
+            List<CategoryExpenseSummaryDTO> monthChart = expenseService.getMonthChart(userId, year, month);
+            return ResponseEntity.ok(monthChart);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
