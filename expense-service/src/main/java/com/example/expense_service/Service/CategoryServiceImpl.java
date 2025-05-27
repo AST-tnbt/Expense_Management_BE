@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService{
             Category category = new Category(categoryDTO.getTitle(), categoryDTO.getIconId(),categoryDTO.getUserId());
             Category saved = categoryRepository.save(category);
             return new CategoryDTO(saved.getCateId(),saved.getTitle(),saved.getIconId(),saved.getUserId());
-            }
+    }
 
     @Override
     public void deleteCategory(UUID id) {
