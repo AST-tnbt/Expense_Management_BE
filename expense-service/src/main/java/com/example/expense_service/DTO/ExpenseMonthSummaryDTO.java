@@ -1,8 +1,11 @@
 package com.example.expense_service.DTO;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ExpenseMonthSummaryDTO {
+public class ExpenseMonthSummaryDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int month;
     private BigDecimal totalAmount;
 

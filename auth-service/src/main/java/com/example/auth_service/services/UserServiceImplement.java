@@ -59,8 +59,8 @@ public class UserServiceImplement implements UserService {
         }
 
         // Validate new password
-        if (request.getNewPassword() == null || request.getNewPassword().length() < 8) {
-            throw new RuntimeException("New password must be at least 8 characters long");
+        if (request.getNewPassword() == null) {
+            throw new RuntimeException("New password must be at least 1 characters long");
         }
 
         // Encode and save new password

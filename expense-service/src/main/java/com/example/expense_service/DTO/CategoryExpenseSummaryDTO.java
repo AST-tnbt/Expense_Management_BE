@@ -1,9 +1,12 @@
 package com.example.expense_service.DTO;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class CategoryExpenseSummaryDTO {
+public class CategoryExpenseSummaryDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private UUID categoryId;
     private String categoryTitle;
     private BigDecimal totalAmount;

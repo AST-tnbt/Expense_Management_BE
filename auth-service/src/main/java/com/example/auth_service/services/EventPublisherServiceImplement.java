@@ -1,17 +1,16 @@
-package com.example.auth_service.services.impl;
+package com.example.auth_service.services;
 
 import com.example.auth_service.configs.RabbitMQConfig;
 import com.example.auth_service.events.UserCreatedEvent;
-import com.example.auth_service.services.EventPublisherService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EventPublisherServiceImpl implements EventPublisherService {
+public class EventPublisherServiceImplement implements EventPublisherService {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public EventPublisherServiceImpl(RabbitTemplate rabbitTemplate) {
+    public EventPublisherServiceImplement(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
