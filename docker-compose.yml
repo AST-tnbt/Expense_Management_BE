@@ -121,7 +121,6 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
-      TOGETHERAI_API_KEY: tgp_v1_7k4DAXncJwlK-Ea2ZEF5i64lbiIh-pkFRuaFjjflWbY
 
     networks:
       - backend-net
