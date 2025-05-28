@@ -1,11 +1,14 @@
 package com.example.expense_service.DTO;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public class ExpenseDTO {
+public class ExpenseDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private UUID expenseId;
     private UUID userId;
     private LocalDate date;

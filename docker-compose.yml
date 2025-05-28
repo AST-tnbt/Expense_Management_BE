@@ -121,6 +121,8 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
+      TOGETHERAI_API_KEY: tgp_v1_7k4DAXncJwlK-Ea2ZEF5i64lbiIh-pkFRuaFjjflWbY
+
     networks:
       - backend-net
 
@@ -145,7 +147,7 @@ services:
       SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0: PreserveHostHeader
       SPRING_CLOUD_GATEWAY_ROUTES_1_ID: expense-service
       SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://expense-service:8081
-      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/categories/**,/expenses/**
+      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/categories/**,/expenses/**,/suggestions/**
       SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED: false
       SECURITY_JWT_SECRET_KEY: v7kLu8f166qD/9BT1NEF8hPivFmKh6bSi8jQy7rrXZ4=
       SECURITY_JWT_EXPIRATION_TIME: 3600000
